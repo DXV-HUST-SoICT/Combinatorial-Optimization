@@ -6,6 +6,9 @@ const int NMAX = 20;
 
 int n;
 int a[NMAX][NMAX];
+// c[i][j]: cost
+// trang thai (i, j): bieu dien i duoi dang nhi phan, cac bit 1 tuong ung voi cac dinh da tham, j la dinh cuoi cung duoc tham
+// p[i][j] = k: trang thai truoc (trang thai (i', k): i' la i nhung da tat bit thu j)
 int c[1 << NMAX][NMAX];
 int p[1 << NMAX][NMAX];
 int inf = 0;
