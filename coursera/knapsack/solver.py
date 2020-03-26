@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from collections import namedtuple
+from ortools.sat.python import cp_model
+
 Item = namedtuple("Item", ['index', 'value', 'weight'])
 
 def naive(items, taken, capacity):
@@ -65,6 +67,31 @@ def greedy_by_avarage_value(items, taken, capacity):
 
     return value, weight, 0
 
+def cp_ortools(items, taken, capacity):
+    value = 0
+    weight = 0
+    opt = 1
+    model = cp_model.CpModel()
+    t = []
+    w = []
+    v = []
+    for i in range(len(items)):
+        item = items[i]
+        t.append(model.NewIntVar(0, 1, 'taken_%i' % i))
+        w.append(t[i] * item.weight)
+        v.append(t[i] * item.value)
+    model.Add(sum(w) <= capacity)
+    model.Maximize(sum(v))
+    solver = cp_model.CpSolver()
+    status = solver.Solve(model)
+    if status == cp_model.OPTIMAL:
+        for i in range(len(t)):
+            taken[i] = solver.Value(t[i])
+        value = int(solver.ObjectiveValue())
+    else:
+        value, weight, opt = greedy_by_avarage_value(items, taken, capacity)
+    return value, weight, opt
+
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -92,7 +119,7 @@ def solve_it(input_data):
     if len(items) * capacity < pow(10, 8):
         solver = dynamic_programming
     else:
-        solver = greedy_by_avarage_value
+        solver = cp_ortools
     value, weight, opt_flag = solver(items, taken, capacity)
     
     # prepare the solution in the specified output format
