@@ -2,13 +2,13 @@ from ortools.sat.python import cp_model
 from copy import deepcopy as cp
 
 # Define input data
-ll = [
+l = [
     [0, 2, 4, 1],
     [2, 0, 3, 7],
     [4, 3, 0, 8],
     [1, 7, 8, 0]
     ]
-n = len(ll)
+n = len(l)
 
 def main():
 
@@ -24,15 +24,6 @@ def main():
         tmp = model.NewIntVar(min(d), max(d), 'tmp_%i' % i)
         model.AddElement(z, d, tmp)
         s.append(tmp)
-
-    # Calculate distance
-    l = []
-    for i in range(len(points)):
-        l.append([])
-        for j in range(len(points)):
-            val = int(1000000 * length(points[i], points[j]))
-            l[i].append(val)
-    n = len(l)
 
     d = []
     for i in range(n):
