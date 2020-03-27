@@ -1,16 +1,16 @@
 from ortools.sat.python import cp_model
 from copy import deepcopy as cp
+import time
+
+start = time.time()
 
 N = 200
-line = ['-'] * N
-tab = []
-for i in range(N):
-	tab.append(cp(line))
 
 model = cp_model.CpModel()
 cVar = [model.NewIntVar(0, N - 1, 'Q%i' % i) for i in range(N)]
 model.AddAllDifferent(cVar)
-model.Add(cVar[0] < cVar[-1])
+model.Add(cVar[0] <= (N // 2))
+model.Add(cVar[-1] > (N // 2))
 
 diag1 = []
 diag2 = []
@@ -29,8 +29,8 @@ status = solver.Solve(model)
 
 if status == cp_model.FEASIBLE:
 	print('ok')
-	for i in range(N):
-		tab[i][solver.Value(cVar[i])] = 'Q'
-		print(tab[i])
 else:
 	print("Can't find solution")
+
+finish = time.time()
+print(finish - start)

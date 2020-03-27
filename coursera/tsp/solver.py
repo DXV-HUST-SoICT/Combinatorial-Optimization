@@ -67,7 +67,7 @@ def dynamic_programming(points):
     opt = 1
     return solution, opt
 
-def cp_ortools(points):
+def lip_ortools(points):
     def find_cycle(solver, d):
         s = [0]
         for i in range(len(d)):
@@ -134,6 +134,63 @@ def cp_ortools(points):
             return(naive(points))
             break
 
+def cp_ortools(points):
+    def appendEdgeValue(model, n, d, s, edge_idx):
+        i = edge_idx
+        j = (i + 1) % n
+        u = model.NewIntVar(0, n - 1, 'u_%i' % i)
+        model.Add(u == p[i])
+        v = model.NewIntVar(0, n - 1, 'v_%i' % i)
+        model.Add(v == p[j])
+        z = model.NewIntVar(0, n * n - 1, 'z_%i' % i)
+        model.Add(z == u * n + v)
+        tmp = model.NewIntVar(min(d), max(d), 'tmp_%i' % i)
+        model.AddElement(z, d, tmp)
+        s.append(tmp)
+
+    # Calculate distance
+    l = []
+    for i in range(len(points)):
+        l.append([])
+        for j in range(len(points)):
+            val = int(1000000 * length(points[i], points[j]))
+            l[i].append(val)
+    n = len(l)
+
+    d = []
+    for i in range(n):
+        for j in range(n):
+            d.append(l[i][j])
+
+    # Initialize model
+    model = cp_model.CpModel()
+    p = []
+
+    # Define variables
+    for i in range(n):
+        p.append(model.NewIntVar(0, n - 1, 'p_%i' % i))
+
+    model.AddAllDifferent(p)
+
+    s = []
+    for i in range(n):
+        appendEdgeValue(model, n, d, s, i)
+
+    # Define objective function
+    model.Minimize(sum(s))
+
+    # Initialize solver
+    solver = cp_model.CpSolver()
+    status = solver.Solve(model)
+
+    if status == cp_model.OPTIMAL:
+        solution = []
+        opt = 1
+        for v in p:
+            solution.append(solver.Value(v))
+        return solution, opt
+    else:
+        return naive(points)
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
