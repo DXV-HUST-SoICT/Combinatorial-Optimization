@@ -4,6 +4,7 @@
 import math
 from collections import namedtuple
 from ortools.sat.python import cp_model
+from copy import deepcopy
 
 Point = namedtuple("Point", ['x', 'y'])
 
@@ -11,6 +12,7 @@ def length(point1, point2):
     return math.sqrt((point1.x - point2.x)**2 + (point1.y - point2.y)**2)
 
 def naive(points):
+    nodeCount = len(points)
     solution = range(0, nodeCount)
     opt = 0
     return solution, opt
@@ -192,6 +194,86 @@ def cp_ortools(points):
     else:
         return naive(points)
 
+def _2opt(points):
+    n = len(points)
+    def _2opt_swap(route, i, k):
+        new_route = deepcopy(route)
+        new_route[i:(k+1)] = reversed(new_route[i:(k+1)])
+        return new_route
+    def calculate_distance(route):
+        distance = 0
+        for i in range(n - 1):
+            distance += length(points[route[i]], points[route[i + 1]])
+        return distance + length(points[route[-1]], points[route[0]])
+    route = list(range(n))
+    best_distance = calculate_distance(route)
+    print(0, ":", best_distance)
+    opt = 0
+    x = 0
+    while (x <= 1000):
+        x += 1
+        start_again = False
+        best_move = deepcopy(route)
+        best_move_distance = best_distance
+        for i in range(1, n - 1):
+            for k in range(i + 1, n):
+                new_distance = best_distance - (length(points[route[i-1]], points[route[i]])\
+                    + length(points[route[k]], points[route[(k+1)%n]])) \
+                    + (length(points[route[i-1]], points[route[k]]) \
+                    + length(points[route[i]], points[route[(k+1)%n]]))
+                if (new_distance < best_move_distance):
+                    best_move_distance = new_distance
+                    best_move = _2opt_swap(route, i, k)
+                    start_again = True
+        if not start_again:
+            break
+        else:
+            route = best_move
+            best_distance = best_move_distance
+            print(x, ":", best_distance)
+    return route, opt
+
+def _2opt_first_improvement(points):
+    n = len(points)
+    def _2opt_swap(route, i, k):
+        new_route = deepcopy(route)
+        new_route[i:(k+1)] = reversed(new_route[i:(k+1)])
+        return new_route
+    def calculate_distance(route):
+        distance = 0
+        for i in range(n - 1):
+            distance += length(points[route[i]], points[route[i + 1]])
+        return distance + length(points[route[-1]], points[route[0]])
+    route = list(range(n))
+    best_distance = calculate_distance(route)
+    print(0, ":", best_distance)
+    opt = 0
+    x = 0
+    while (x <= 1000):
+        x += 1
+        start_again = False
+        best_move = deepcopy(route)
+        best_move_distance = best_distance
+        for i in range(1, n - 1):
+            for k in range(i + 1, n):
+                new_distance = best_distance - (length(points[route[i-1]], points[route[i]])\
+                    + length(points[route[k]], points[route[(k+1)%n]])) \
+                    + (length(points[route[i-1]], points[route[k]]) \
+                    + length(points[route[i]], points[route[(k+1)%n]]))
+                if (new_distance < best_move_distance):
+                    best_move_distance = new_distance
+                    best_move = _2opt_swap(route, i, k)
+                    start_again = True
+                    break
+        if not start_again:
+            break
+        else:
+            route = best_move
+            best_distance = best_move_distance
+            print(x, ":", best_distance)
+    return route, opt
+
+
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -214,7 +296,10 @@ def solve_it(input_data):
         solver = dynamic_programming
     else:
         solver = cp_ortools
-
+    solver = _2opt
+    solver = _2opt_first_improvement
+    # if len(points) >= 300:
+    #     solver = naive
     solution, opt = solver(points)
 
     # calculate the length of the tour
