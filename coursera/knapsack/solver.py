@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from collections import namedtuple
-from ortools.sat.python import cp_model
+from ortools_based_solver import *
+from greedy import *
+from dynamic_programming import *
 
 Item = namedtuple("Item", ['index', 'value', 'weight'])
 
@@ -15,82 +17,6 @@ def naive(items, taken, capacity):
             value += item.value
             weight += item.weight
     return value, weight, 0
-
-def dynamic_programming(items, taken, capacity):
-    best = [[0] * len(items)]
-    for c in range(1, capacity + 1):
-        for i in range(len(items)):
-            if i == 0:
-                best.append([0])
-            elif (items[i].weight <= c) and (best[c - items[i].weight][i-1] + items[i].value > best[c][i-1]):
-                best[c].append(best[c - items[i].weight][i-1] + items[i].value)
-            else:
-                best[c].append(best[c][i-1])
-
-    tmp_capacity = capacity
-    tmp_idx = 0
-    for i in range(len(items)):
-        if best[capacity][i] > best[capacity][tmp_idx]:
-            tmp_idx = i
-
-
-    value = 0
-    weight = 0
-
-    while tmp_capacity > 0 and tmp_idx >= 0:
-        if best[tmp_capacity][tmp_idx] == best[tmp_capacity][tmp_idx-1]:
-            taken[tmp_idx] = 0
-        else:
-            taken[tmp_idx] = 1
-            value += items[tmp_idx].value
-            weight += items[tmp_idx].weight
-            tmp_capacity -= items[tmp_idx].weight
-        tmp_idx -= 1
-
-    return value, weight, 1
-
-def greedy_by_avarage_value(items, taken, capacity):
-    def key(item):
-        return item.value / item.weight
-
-    items.sort(key=key, reverse=True)
-
-    value = 0
-    weight = 0
-
-    for i in range(len(items)):
-        item = items[i]
-        if weight + item.weight <= capacity:
-            value += item.weight
-            weight += item.weight
-            taken[item.index] = 1
-
-    return value, weight, 0
-
-def cp_ortools(items, taken, capacity):
-    value = 0
-    weight = 0
-    opt = 1
-    model = cp_model.CpModel()
-    t = []
-    w = []
-    v = []
-    for i in range(len(items)):
-        item = items[i]
-        t.append(model.NewIntVar(0, 1, 'taken_%i' % i))
-        w.append(t[i] * item.weight)
-        v.append(t[i] * item.value)
-    model.Add(sum(w) <= capacity)
-    model.Maximize(sum(v))
-    solver = cp_model.CpSolver()
-    status = solver.Solve(model)
-    if status == cp_model.OPTIMAL:
-        for i in range(len(t)):
-            taken[i] = solver.Value(t[i])
-        value = int(solver.ObjectiveValue())
-    else:
-        value, weight, opt = greedy_by_avarage_value(items, taken, capacity)
-    return value, weight, opt
 
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
@@ -116,6 +42,8 @@ def solve_it(input_data):
     taken = [0]*len(items)
 
     solver = naive
+    solver = dynamic_programming
+    solver = cp_ortools
     if len(items) * capacity < pow(10, 8):
         solver = dynamic_programming
     else:

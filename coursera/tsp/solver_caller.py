@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 import time
 
-files = open('_coursera').read().split('\n')[2:8]
+files = open('_coursera').read().split('\n')[2:3]
 
 test = []
 for f in files:
