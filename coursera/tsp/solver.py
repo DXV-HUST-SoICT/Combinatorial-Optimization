@@ -7,6 +7,7 @@ from dynamic_programming import *
 from ortools_based_solver import *
 from two_opt import *
 from ortools_routing import *
+from TwoOptSolver import *
 
 Point = namedtuple("Point", ['x', 'y'])
 
