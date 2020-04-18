@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 import time
 
-files = open('_coursera').read().split('\n')[2:3]
+files = open('_coursera').read().split('\n')[3:6]
 
 test = []
 for f in files:
@@ -11,7 +11,6 @@ for f in files:
 	test.append((tmp[0], tmp[1]))
 
 result_file = open('all_result.txt', 'a')
-result_file.write('Time: ' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
 
 result = dict()
 
@@ -21,4 +20,5 @@ for t in test:
 	end = time.clock()
 	result[t[0]] = {'output': output + '\n' + str(end - start)}
 
+result_file.write('Time: ' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
 result_file.write(json.dumps(result, sort_keys=True, indent=4, separators=(',', ':')) + "\n\n")

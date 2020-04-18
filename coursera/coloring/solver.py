@@ -33,6 +33,7 @@ def solve_it(input_data):
     solver = greedy
     solver = cp_ortools_with_greedy
     solver = cp_ortools_wih_greedy_feasible_problem
+    solver = greedy_by_max_deg
     solution, opt = solver(node_count, edge_count, edges)
     
     obj = len(set(solution))

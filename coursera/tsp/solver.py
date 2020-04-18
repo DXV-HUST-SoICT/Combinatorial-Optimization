@@ -6,6 +6,7 @@ from utils import *
 from dynamic_programming import *
 from ortools_based_solver import *
 from two_opt import *
+from ortools_routing import *
 
 Point = namedtuple("Point", ['x', 'y'])
 
@@ -37,6 +38,8 @@ def solve_it(input_data):
     solver = lip_ortools
     solver = cp_ortools
     solver = two_opt
+    solver = ortools_routing
+    print('solving...')
     
     solution, opt = solver(points)
 
@@ -48,6 +51,9 @@ def solve_it(input_data):
     # prepare the solution in the specified output format
     output_data = '%.2f' % obj + ' ' + str(opt) + '\n'
     output_data += ' '.join(map(str, solution))
+
+    # solver = TwoOptSolver(points)
+    # output_data = solver.solve()
 
     return output_data
 
