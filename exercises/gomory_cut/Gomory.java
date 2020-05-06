@@ -3,13 +3,14 @@ import java.util.Scanner;
 
 public class Gomory {
 	private Fraction[][] tbl;
+	private boolean[] integral;  // = true if i-th variable must be integral
 	private int n;
 	private int m;
 	private Fraction[] result;
 	private int N;
 	private int M;
 
-	public Gomory(Fraction[][] tbl) {
+	public Gomory(Fraction[][] tbl, boolean[] integral) {
 		M = m = tbl.length - 1;
 		N = n = tbl[0].length - 1;
 		this.tbl = new Fraction[m + 1][n + 1];
@@ -18,7 +19,13 @@ public class Gomory {
 				this.tbl[i][j] = new Fraction(tbl[i][j]);
 			}
 		}
-		this.result = new Fraction[n];
+		
+		this.integral = new boolean[n];
+		for (int j = 0; j < n; j++) {
+            this.integral[j] = integral[j];
+        }
+
+        this.result = new Fraction[n];
 	}
 
 	public boolean solve() {
@@ -46,7 +53,7 @@ public class Gomory {
 					continue;
 				}
 				result[b[i]] = tbl[i][n].divide(tbl[i][b[i]]);
-				if (result[b[i]].getDenominator() != 1) {
+				if ((integral[b[i]] == true) && (result[b[i]].getDenominator() != 1)) {
 					p = i;
 					break;
 				}
@@ -88,7 +95,7 @@ public class Gomory {
 
 	public static void main(String[] args) {
 		try {
-			FileInputStream fis = new FileInputStream("data/gomory_01");
+			FileInputStream fis = new FileInputStream("data/gomory_04");
 			Scanner s = new Scanner(fis);
 			int m = s.nextInt();	// No constraints
 			int n = s.nextInt();	// No variables
@@ -108,8 +115,19 @@ public class Gomory {
 			}
 
 			tbl[m][n] = new Fraction(0);
+
+			boolean[] integral = new boolean[n];
+
+			for (int j = 0; j < n; j++) {
+                integral[j] = false;
+            }
+
+            int ni = s.nextInt();
+            for (int i = 0; i < ni; i++) {
+                integral[s.nextInt()] = true;
+            }
 		
-			Gomory solver = new Gomory(tbl);
+			Gomory solver = new Gomory(tbl, integral);
 			if (solver.solve()) {
 				Fraction[] result = solver.getResult();
 				for (int i = 0; i < n; i++) {
