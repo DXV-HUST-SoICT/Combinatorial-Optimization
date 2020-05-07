@@ -2,14 +2,14 @@
 Gồm 4 class:
 1. Fraction
 - Định nghĩa kiểu dữ liệu phân số
-- Gồm một số phương thức tương ứng với các toán tử:
+- Gồm một số phương thức tương ứng với các toán tử đơn giản:
 	- Plus
 	- Minus
 	- Multiply
 	- Divide
 	- Floor
 	- Ceil
-	...
+	- ...
 2. Simplex
 - Giải bài toán LP (maximize) được cho dưới dạng chính tắc (ràng buộc đẳng thức) và biết trước một cơ sở chấp nhận được
 - Input: ./data/simplex_xx
