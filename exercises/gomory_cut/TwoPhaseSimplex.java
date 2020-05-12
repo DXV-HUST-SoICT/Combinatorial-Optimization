@@ -98,7 +98,7 @@ public class TwoPhaseSimplex {
 		for (int i = 0; i < m; i++) {
 			if (b[i] >= n) {
 				for (int j = 0; j < n; j++) {
-					if (!flag[j]) {
+					if ((tbl[i][j].compare(0) != 0) && (!flag[j])) {
 						this.b[i] = j;
 						flag[j] = true;
 						break;
