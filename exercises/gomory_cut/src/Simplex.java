@@ -92,15 +92,6 @@ public class Simplex {
 
     public void standardize() {
 
-        // RHS > 0
-        for (int i = 0; i < m; i++) {
-            if (tbl[i][n].compare(0) < 0) {
-                for (int j = 0; j <= n; j++) {
-                    tbl[i][j] = tbl[i][j].negative();
-                }
-            }
-        }
-
         // Basic coefficient = 1
         for (int i = 0; i < m; i++) {
             // System.out.println("Check: " + i + " " + b[i] + " " + n);
@@ -108,15 +99,6 @@ public class Simplex {
             for (int j = 0; j <= n; j++) {
                 tbl[i][j] = tbl[i][j].divide(c);
             }
-        }
-
-        // Initialize value of basic variables
-        Fraction[] v = new Fraction[n];
-        for (int j = 0; j < n; j++) {
-            v[j] = new Fraction(0);
-        }
-        for (int i = 0; i < m; i++) {
-            v[b[i]] = tbl[i][n];   // All non-basic variables equal 0
         }
 
         for (int i = 0; i < m; i++) {
