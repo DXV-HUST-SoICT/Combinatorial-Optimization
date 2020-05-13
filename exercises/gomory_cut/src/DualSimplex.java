@@ -21,7 +21,7 @@ class DualSimplex extends Simplex {
         return true;
     }
 
-    public static void Main(String[] args) {
+    public static void main(String[] args) {
 
     }
 
@@ -57,7 +57,6 @@ class DualSimplex extends Simplex {
                 }
             }
             pivot(p, q);
-            System.out.println("After pivot: " + p + " " + q);
             printTableaux();
         }
         return solvable;
