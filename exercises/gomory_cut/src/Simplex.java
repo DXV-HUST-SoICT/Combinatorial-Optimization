@@ -108,7 +108,7 @@ public class Simplex {
             }
         }
         System.out.println("====> Standardized");
-        printTableaux();
+        printTableau();
 
     }
 
@@ -146,7 +146,7 @@ public class Simplex {
         }  
     }
 
-    public void printTableaux() {
+    public void printTableau() {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 System.out.print(tbl[i][j] + "\t");

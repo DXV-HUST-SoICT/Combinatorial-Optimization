@@ -10,14 +10,14 @@ class DualSimplex extends Simplex {
             return false;
         }
         System.out.println("====> Dual Solution:");
-        printTableaux();
+        printTableau();
 
         System.out.println("==> Solving Primal:");
         if (!super.solve()) {
             return false;
         }
         System.out.println("====> Primal Solution");
-        printTableaux();
+        printTableau();
         return true;
     }
 

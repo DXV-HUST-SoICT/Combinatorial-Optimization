@@ -60,7 +60,7 @@ public class TwoPhaseSimplex {
 		tbl[m][n + m] = new Fraction(0);
 
 		System.out.println("====> Fake BFS with slack variables");
-		printTableaux(tbl, b);
+		printTableau(tbl, b);
 
 		Simplex ss = new Simplex(tbl, b);
 		if (!ss.solve()) {
@@ -71,7 +71,7 @@ public class TwoPhaseSimplex {
 		tbl = ss.getTbl();
 
 		System.out.println("====> BFS with slack variables");
-		printTableaux(tbl, b);
+		printTableau(tbl, b);
 
 		if (tbl[m][n + m].compare(0) != 0) {
 			System.out.println("BFS is not valid!");
@@ -122,7 +122,7 @@ public class TwoPhaseSimplex {
 		System.out.println("==> Finding LP optimum solution");
 
 		System.out.println("====> BFS with only origin variables");
-		printTableaux(tbl, b);
+		printTableau(tbl, b);
 	
 		Simplex solver = new Simplex(this.tbl, this.b);
 		if (!solver.solve()) {
@@ -143,7 +143,7 @@ public class TwoPhaseSimplex {
 		}
 
 		System.out.println("====> LP optimum solution");
-		printTableaux();
+		printTableau();
 		
 		return true;
 	}
@@ -179,7 +179,7 @@ public class TwoPhaseSimplex {
 		}
 	}
 
-	public void printTableaux() {
+	public void printTableau() {
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
 				System.out.print(tbl[i][j] + "\t");
@@ -194,7 +194,7 @@ public class TwoPhaseSimplex {
 		System.out.println("======");
 	}
 
-	public void printTableaux(Fraction[][] tbl, int[] b) {
+	public void printTableau(Fraction[][] tbl, int[] b) {
 		int m = tbl.length - 1;
 		int n = tbl[0].length - 1;
 		for (int i = 0; i < m; i++) {

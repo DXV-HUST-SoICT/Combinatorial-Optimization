@@ -85,7 +85,7 @@ public class GomoryDualSimplex extends GomoryTwoPhaseSimplex {
     public int dualSimplex(int count) {
         System.out.println("Loop " + count + ":");
         System.out.println("==> initial");
-        printTableaux();
+        printTableau();
         DualSimplex solver = new DualSimplex(tbl, b);
         if (!solver.solve()) {
             System.out.println("Can't solve LP problem");

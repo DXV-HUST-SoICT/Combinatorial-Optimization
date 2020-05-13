@@ -36,7 +36,7 @@ public class GomoryTwoPhaseSimplex {
 	public int twoPhaseSimplex(int count) {
 		System.out.println("Loop " + count + ":");
 		System.out.println("==> initial");
-		printTableaux();
+		printTableau();
 		TwoPhaseSimplex solver = new TwoPhaseSimplex(tbl);
 		if (!solver.solve()) {
 			System.out.println("Can't solve LP problem");
@@ -173,7 +173,7 @@ public class GomoryTwoPhaseSimplex {
 		return result;
 	}
 
-	public void printTableaux() {
+	public void printTableau() {
 		for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) {
 				System.out.print(tbl[i][j] + "\t");
@@ -188,7 +188,7 @@ public class GomoryTwoPhaseSimplex {
 		System.out.println("======");
 	}
 
-	public void printTableaux(Fraction[][] tbl, int[] b) {
+	public void printTableau(Fraction[][] tbl, int[] b) {
 		int m = tbl.length - 1;
 		int n = tbl[0].length - 1;
 		for (int i = 0; i < m; i++) {
