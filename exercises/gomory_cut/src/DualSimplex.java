@@ -57,7 +57,6 @@ class DualSimplex extends Simplex {
                 }
             }
             pivot(p, q);
-            printTableaux();
         }
         return solvable;
     }
