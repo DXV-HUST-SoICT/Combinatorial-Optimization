@@ -2,13 +2,13 @@ import java.io.FileInputStream;
 import java.util.Scanner;
 
 public class GomoryTwoPhaseSimplex {
-	private Fraction[][] tbl;
-	private boolean[] integral;  // = true if i-th variable must be integral
-	private int n;
-	private int m;
-	private Fraction[] result;
-	private int N;
-	private int M;
+	protected Fraction[][] tbl;
+	protected boolean[] integral;  // = true if i-th variable must be integral
+	protected int n;
+	protected int m;
+	protected Fraction[] result;
+	protected int N;
+	protected int M;
 
 	public GomoryTwoPhaseSimplex(Fraction[][] tbl, boolean[] integral) {
 		M = m = tbl.length - 1;
@@ -28,67 +28,77 @@ public class GomoryTwoPhaseSimplex {
         this.result = new Fraction[n];
 	}
 
+	public int twoPhaseSimplex(int count) {
+		System.out.println("Loop " + count + ":");
+		System.out.println("==> initial");
+		printTableaux();
+		TwoPhaseSimplex solver = new TwoPhaseSimplex(tbl);
+		if (!solver.solve()) {
+			System.out.println("Can't solve LP problem");
+			return -1;
+		}
+		Fraction[][] tbl = solver.getTbl();
+		int[] b = solver.getB();
+
+		for (int i = 0; i < N; i++) {
+			result[i] = new Fraction(0);
+		}
+
+		int p = -1;
+		for (int i = 0; i < m; i++) {
+			if (b[i] >= N) {
+				continue;
+			}
+			result[b[i]] = tbl[i][n].divide(tbl[i][b[i]]);
+			if ((integral[b[i]] == true) && (result[b[i]].getDenominator() != 1)) {
+				p = i;
+				break;
+			}
+		}
+		if (p == -1) {
+			return 1;
+		}
+
+		Fraction[][] tmp_tbl = new Fraction[m + 2][n + 2];
+
+		tmp_tbl[m + 1][n] = new Fraction(0);
+		tmp_tbl[m + 1][n + 1] = new Fraction(this.tbl[m][n]);
+		for (int j = 0; j < n; j++) {
+			tmp_tbl[m + 1][j] = new Fraction(this.tbl[m][j]);
+		}
+
+		tmp_tbl[m][n] = new Fraction(-1, 1);
+		tmp_tbl[m][n + 1] = tbl[p][n].minus(tbl[p][n].floor());
+
+		for (int j = 0; j < n; j++) {
+			tmp_tbl[m][j] = tbl[p][j].minus(tbl[p][j].floor());
+		}
+
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				tmp_tbl[i][j] = new Fraction(tbl[i][j]);
+			}
+			tmp_tbl[i][n] = new Fraction(0);
+			tmp_tbl[i][n + 1] = new Fraction(tbl[i][n]);
+		}
+		this.tbl = tmp_tbl;
+		m += 1;
+		n += 1;
+
+		System.out.println("End loop " + count + "!");
+		return 0;
+	}
+
 	public boolean solve() {
 		int count = 0;
 		while (true) {
 			count++;
-			System.out.println("Loop " + count + ":");
-			System.out.println("==> initial");
-			printTableaux();
-			TwoPhaseSimplex solver = new TwoPhaseSimplex(tbl);
-			if (!solver.solve()) {
-				System.out.println("Can't solve LP problem");
+			int res = twoPhaseSimplex(count);
+			if (res == -1) {
 				return false;
-			}
-			Fraction[][] tbl = solver.getTbl();
-			int[] b = solver.getB();
-
-			for (int i = 0; i < N; i++) {
-				result[i] = new Fraction(0);
-			}
-
-			int p = -1;
-			for (int i = 0; i < m; i++) {
-				if (b[i] >= N) {
-					continue;
-				}
-				result[b[i]] = tbl[i][n].divide(tbl[i][b[i]]);
-				if ((integral[b[i]] == true) && (result[b[i]].getDenominator() != 1)) {
-					p = i;
-					break;
-				}
-			}
-			if (p == -1) {
+			} else if (res == 1) {
 				break;
 			}
-
-			Fraction[][] tmp_tbl = new Fraction[m + 2][n + 2];
-
-			tmp_tbl[m + 1][n] = new Fraction(0);
-			tmp_tbl[m + 1][n + 1] = new Fraction(this.tbl[m][n]);
-			for (int j = 0; j < n; j++) {
-				tmp_tbl[m + 1][j] = new Fraction(this.tbl[m][j]);
-			}
-
-			tmp_tbl[m][n] = new Fraction(-1, 1);
-			tmp_tbl[m][n + 1] = tbl[p][n].minus(tbl[p][n].floor());
-
-			for (int j = 0; j < n; j++) {
-				tmp_tbl[m][j] = tbl[p][j].minus(tbl[p][j].floor());
-			}
-
-			for (int i = 0; i < m; i++) {
-				for (int j = 0; j < n; j++) {
-					tmp_tbl[i][j] = new Fraction(tbl[i][j]);
-				}
-				tmp_tbl[i][n] = new Fraction(0);
-				tmp_tbl[i][n + 1] = new Fraction(tbl[i][n]);
-			}
-			this.tbl = tmp_tbl;
-			m += 1;
-			n += 1;
-
-			System.out.println("End loop " + count + "!");
 		}
 		return true;
 	}

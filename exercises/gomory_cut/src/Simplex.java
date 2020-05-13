@@ -3,10 +3,10 @@ import java.util.Scanner;
 
 public class Simplex {
 
-    private Fraction [][] tbl; // Simplex Tableaux
-    private int[] b; // Base of i-th constraint
-    private int m;  // No constraints
-    private int n;  // No variables
+    protected Fraction [][] tbl; // Simplex Tableaux
+    protected int[] b; // Base of i-th constraint
+    protected int m;  // No constraints
+    protected int n;  // No variables
 
     public Fraction[][] getTbl() {
         return tbl;
@@ -77,7 +77,7 @@ public class Simplex {
                 solvable = false;
                 break;
             }
-            for (int i= p + 1; i < m; i++) {
+            for (int i = p + 1; i < m; i++) {
                 if (tbl[i][q].compare(0) > 0) {
                     if (tbl[i][n].divide(tbl[i][q]).compare(tbl[p][n].divide(tbl[p][q])) < 0) {
                         p = i;
