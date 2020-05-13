@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class GomoryTwoPhaseSimplex {
 	protected Fraction[][] tbl;
+	protected int[] b;
 	protected boolean[] integral;  // = true if i-th variable must be integral
 	protected int n;
 	protected int m;
@@ -26,6 +27,10 @@ public class GomoryTwoPhaseSimplex {
         }
 
         this.result = new Fraction[n];
+		this.b = new int[n];
+		for (int i = 0; i < n; i++) {
+			this.b[i] = -1;
+		}
 	}
 
 	public int twoPhaseSimplex(int count) {
@@ -81,7 +86,15 @@ public class GomoryTwoPhaseSimplex {
 			tmp_tbl[i][n] = new Fraction(0);
 			tmp_tbl[i][n + 1] = new Fraction(tbl[i][n]);
 		}
+
+		int[] tmp_b = new int[m + 1];
+		for (int i = 0; i < b.length; i++) {
+			tmp_b[i] = b[i];
+		}
+		tmp_b[m] = n;
+
 		this.tbl = tmp_tbl;
+		this.b = tmp_b;
 		m += 1;
 		n += 1;
 
@@ -165,7 +178,7 @@ public class GomoryTwoPhaseSimplex {
 			for (int j = 0; j < n; j++) {
 				System.out.print(tbl[i][j] + "\t");
 			}
-			System.out.println(" | " + tbl[i][n]);
+			System.out.println(" | " + tbl[i][n] + "\tBase: " + b[i]);
 		}
 
 		for (int j = 0; j < n; j++) {
