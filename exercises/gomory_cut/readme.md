@@ -27,7 +27,7 @@ Gồm 4 class:
 		- n số đầu tiên là các số hữu tỉ, số thứ j là hệ số của các biến x_j trong ràng buộc thứ i.
 		- Số thứ n+1 là một số hữu tỉ, là giá trị vế phải của ràng buộc.
 	- Dòng cuối cùng gồm n số hữu tỉ là hệ số của các biến trong hàm mục tiêu
-4. Gomory
+4. GomoryTwoPhaseSimplex
 - Giải bài toán MILP (maximize) được cho dưới dạng chính tắc (ràng buộc bất đẳng thức), trong đó có một số biến bị ràng buộc nguyên
 - Input: ./data/gomory_xx
 	- Dòng đầu gồm 2 số nguyên m và n lần lượt là số ràng buộc và số biến
@@ -43,7 +43,7 @@ Gồm 4 class:
 - Chương trình được viết trên hệ điều hành Windows, được compile bằng java compiler 1.8 và chạy thành công bằng JRE 1.8.
 2. Thay đổi input
 - Mỗi class đều có một hàm main() được dùng để test chức năng của class đó.
-- Với các class Gomory, TwoPhaseSimplex và Simplex thì đầu mỗi hàm main() đều có một biến fis chứa thông tin đường dẫn đến file input, ta chỉ cần tạo một file input hợp lệ và thay đổi đường dẫn đến file input này.
+- Với các class GomoryTwoPhaseSimplex, TwoPhaseSimplex và Simplex thì đầu mỗi hàm main() đều có một biến fis chứa thông tin đường dẫn đến file input, ta chỉ cần tạo một file input hợp lệ và thay đổi đường dẫn đến file input này.
 3. Compile
 - Chạy lệnh `javac A.java` để biên dịch class A.
 4. Chạy chương trình

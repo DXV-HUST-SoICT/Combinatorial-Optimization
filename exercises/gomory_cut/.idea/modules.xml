@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gomory_cut.iml" filepath="$PROJECT_DIR$/.idea/gomory_cut.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gomory_cut.iml" filepath="$PROJECT_DIR$/gomory_cut.iml" />
     </modules>
   </component>
 </project>

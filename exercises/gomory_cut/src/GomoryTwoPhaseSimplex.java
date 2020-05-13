@@ -1,7 +1,7 @@
 import java.io.FileInputStream;
 import java.util.Scanner;
 
-public class Gomory {
+public class GomoryTwoPhaseSimplex {
 	private Fraction[][] tbl;
 	private boolean[] integral;  // = true if i-th variable must be integral
 	private int n;
@@ -10,7 +10,7 @@ public class Gomory {
 	private int N;
 	private int M;
 
-	public Gomory(Fraction[][] tbl, boolean[] integral) {
+	public GomoryTwoPhaseSimplex(Fraction[][] tbl, boolean[] integral) {
 		M = m = tbl.length - 1;
 		N = n = tbl[0].length - 1;
 		this.tbl = new Fraction[m + 1][n + 1];
@@ -94,8 +94,14 @@ public class Gomory {
 	}
 
 	public static void main(String[] args) {
+		String fileName = "";
+		if (args.length > 0) {
+			fileName = args[0];
+		} else {
+			fileName = "data/gomory_04";
+		}
 		try {
-			FileInputStream fis = new FileInputStream("data/gomory_04");
+			FileInputStream fis = new FileInputStream(fileName);
 			Scanner s = new Scanner(fis);
 			int m = s.nextInt();	// No constraints
 			int n = s.nextInt();	// No variables
@@ -126,8 +132,8 @@ public class Gomory {
             for (int i = 0; i < ni; i++) {
                 integral[s.nextInt()] = true;
             }
-		
-			Gomory solver = new Gomory(tbl, integral);
+
+			GomoryTwoPhaseSimplex solver = new GomoryTwoPhaseSimplex(tbl, integral);
 			if (solver.solve()) {
 				Fraction[] result = solver.getResult();
 				for (int i = 0; i < n; i++) {
