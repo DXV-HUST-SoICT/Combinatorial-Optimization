@@ -40,7 +40,11 @@ public class TwoPhaseSimplex {
 				tbl[i][j] = new Fraction(0, 1);
 			}
 			// Coefficients of slack variables
-			tbl[i][n + i] = new Fraction(1, 1);
+			if ((this.tbl[i][n].compare(0)) >= 0) {
+				tbl[i][n + i] = new Fraction(1, 1);
+			} else {
+				tbl[i][n + i] = new Fraction(-1, 1);
+			}
 			// Values of equalities
 			tbl[i][n + m] = new Fraction(this.tbl[i][n]);
 			// Coefficients of objective funtion
