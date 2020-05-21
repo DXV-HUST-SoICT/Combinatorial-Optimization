@@ -1,5 +1,5 @@
 # Cấu trúc chương trình
-Gồm 4 class:
+Gồm 6 class:
 1. Fraction
 - Định nghĩa kiểu dữ liệu phân số
 - Gồm một số phương thức tương ứng với các toán tử đơn giản:
@@ -37,6 +37,14 @@ Gồm 4 class:
 	- Dòng thứ m + 2 gồm n số hữu tỉ là hệ số của các biến trong hàm mục tiêu
 	- Dòng thứ m + 3 gồm một số n' là số lượng biến bị ràng buộc nguyên
 	- Dòng cuối cùng có n' số nguyên, là chỉ số của các biến bị ràng buộc nguyên
+
+5. DualSimplex
+- Giải bài toán dual của bài toán LP hiện tại
+
+6. GomoryDualSimplex
+- Tương tự như class GomoryTwoPhaseSimplex nhưng sử dụng DualSimplex để giải tối ưu sau mỗi lần cắt.
+	- Bước đầu tiên vẫn sử dụng thuật toán 2-phase simplex.
+	- Sau khi tìm được nghiệm tối ưu, nếu không thoả mãn các ràng buộc nguyên, ta thêm Gomory cut và chạy giải thuật Dual Simplex để tìm BFS ban đầu của bài toán mới.
 
 # Cách chạy chương trình
 1. Môi trường
