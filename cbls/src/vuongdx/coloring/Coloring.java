@@ -1,4 +1,4 @@
-package coloring;
+package vuongdx.coloring;
 
 import vuongdx.search.ISolver;
 

@@ -1,4 +1,4 @@
-package coloring;
+package vuongdx.coloring;
 
 import localsearch.model.IConstraint;
 import localsearch.model.LocalSearchManager;
