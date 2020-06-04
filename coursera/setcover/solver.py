@@ -25,8 +25,10 @@
 
 
 from collections import namedtuple
-from ortools.linear_solver import pywraplp
 from time import time
+from greedy import *
+from or_tools_based import *
+from localsearch import *
 
 
 Set = namedtuple("Set", ['index', 'cost', 'items'])
@@ -44,57 +46,6 @@ def naive(set_count, item_count, sets):
             break
     return 0, solution
 
-def mip(set_count, item_count, sets):
-    
-    solver = pywraplp.Solver("MIP", pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
-    v = []
-    for i in range(set_count):
-        v.append(solver.IntVar(0, 1, 'v_%i' % i))
-    for i in range(item_count):
-        c = solver.Constraint(1, solver.infinity())
-        for j in range(set_count):
-            s = sets[j]
-            if i in set(s.items):
-                c.SetCoefficient(v[j], 1)
-    objective = solver.Objective()
-    for i in range(set_count):
-        objective.SetCoefficient(v[i], sets[i].cost)
-    objective.SetMinimization()
-    start = time()
-    status = solver.Solve()
-    end = time()
-    if status == solver.OPTIMAL:
-        opt = 1
-    else:
-        opt = 0
-    total_cost = 0
-    solution = [0] * set_count
-    for i in range(set_count):
-        if int(v[i].solution_value()) == 1:
-            solution[i] = 1
-    return opt, solution
-
-def greedy(set_count, item_count, sets):
-    covered = set()
-    solution = [0] * set_count
-    while len(covered) < item_count:
-        m = float("inf")
-        t = None
-        for i in range(set_count):
-            if (len(sets[i].items) != 0) and ((sets[i].cost / len(sets[i].items)) < m):
-                m = sets[i].cost / len(sets[i].items)
-                t = i
-        solution[t] = 1
-        for i in range(set_count):
-            if i != t:
-                for item in sets[t].items:
-                    sets[i].items.discard(item)
-        covered |= sets[t].items
-        # print("length of covered set:", len(covered))
-        sets[t].items.clear()
-    return 0, solution
-
-
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -111,7 +62,9 @@ def solve_it(input_data):
         sets.append(Set(i-1, float(parts[0]), set([int(x) for x in parts[1:]])))
 
     # solution here
-    solver = mip
+    # solver = mip
+    # solver = greedy
+    solver = localsearch
     opt, solution = solver(set_count, item_count, sets)
         
     # calculate the cost of the solution
