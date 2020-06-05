@@ -3,6 +3,9 @@
 
 from collections import namedtuple
 import math
+from greedy import *
+from localsearch import *
+from utils import *
 
 Point = namedtuple("Point", ['x', 'y'])
 Facility = namedtuple("Facility", ['index', 'setup_cost', 'capacity', 'location'])
@@ -31,21 +34,11 @@ def solve_it(input_data):
         parts = lines[i].split()
         customers.append(Customer(i-1-facility_count, int(parts[0]), Point(float(parts[1]), float(parts[2]))))
 
-    # build a trivial solution
-    # pack the facilities one by one until all the customers are served
-    solution = [-1]*len(customers)
-    capacity_remaining = [f.capacity for f in facilities]
-
-    facility_index = 0
-    for customer in customers:
-        if capacity_remaining[facility_index] >= customer.demand:
-            solution[customer.index] = facility_index
-            capacity_remaining[facility_index] -= customer.demand
-        else:
-            facility_index += 1
-            assert capacity_remaining[facility_index] >= customer.demand
-            solution[customer.index] = facility_index
-            capacity_remaining[facility_index] -= customer.demand
+    # solver = naive
+    solver = localsearch
+    # solver = greedy
+    # solver = mip_mini_batch
+    solution, opt = solver(facilities, customers)
 
     used = [0]*len(facilities)
     for facility_index in solution:
